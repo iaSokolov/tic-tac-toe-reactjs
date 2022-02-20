@@ -4,7 +4,7 @@ import Board from './Board';
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {            
+        this.state = {
             history: [{ winner: null, currentPlayer: 'X', square: Array(9).fill(null) }]
         };
     }
@@ -13,19 +13,21 @@ class Game extends React.Component {
         this.setState({ history: this.state.history.slice(0, step + 1) });
     }
 
-    changeSquareItem(i) {        
-        if (!this.state.history[this.state.history.length - 1].winner) {            
+    changeSquareItem(i) {
+        if (!this.state.history[this.state.history.length - 1].winner) {
             let currentState = this.state.history[this.state.history.length - 1];
-            let newState = {
-                square: currentState.square.slice(), 
-                winner: null, 
-                currentPlayer: currentState.currentPlayer === 'X' ? 'O' : 'X'
-            };  
-            newState.square[i] = currentState.currentPlayer; 
-            newState.winner = this.calcWinner(newState.square);
-            this.setState({                
-                history: this.state.history.concat([newState])
-            });
+            if (!currentState.square[i]) {
+                let newState = {
+                    square: currentState.square.slice(),
+                    winner: null,
+                    currentPlayer: currentState.currentPlayer === 'X' ? 'O' : 'X'
+                };
+                newState.square[i] = currentState.currentPlayer;
+                newState.winner = this.calcWinner(newState.square);
+                this.setState({
+                    history: this.state.history.concat([newState])
+                });
+            }
         }
     }
 
@@ -55,8 +57,8 @@ class Game extends React.Component {
         return ret;
     }
 
-    render() {        
-        let currentState = this.state.history[this.state.history.length - 1]; 
+    render() {
+        let currentState = this.state.history[this.state.history.length - 1];
 
         return (
             <div className="game">
