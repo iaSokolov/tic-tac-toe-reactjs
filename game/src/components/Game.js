@@ -5,16 +5,18 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            history: [{ winner: null, currentPlayer: 'X', square: Array(9).fill(null) }]
+            history: [{winner: null, currentPlayer: 'X', square: Array(9).fill(null)}]
         };
     }
 
     onGoToStepHandler(step) {
-        this.setState({ history: this.state.history.slice(0, step + 1) });
+        this.setState({history: this.state.history.slice(0, step + 1)});
     }
 
     changeSquareItem(i) {
-        if (!this.state.history[this.state.history.length - 1].winner) {
+        if (!this.state.history[this.state.history.length - 1].winner && this.state.history.length < 10) {
+            console.log('set value')
+
             let currentState = this.state.history[this.state.history.length - 1];
             if (!currentState.square[i]) {
                 let newState = {
@@ -58,19 +60,26 @@ class Game extends React.Component {
     }
 
     render() {
+
         let currentState = this.state.history[this.state.history.length - 1];
+        let state = currentState.winner ? ('Winner: ' + currentState.winner) :
+            this.state.history.length == 10 ? 'End game' : ('Player: ' + currentState.currentPlayer);
 
         return (
             <div className="game">
                 <div className="game-board">
                     <Board squareItem={currentState.square.slice()}
-                        onChangeStatus={(newStatus) => this.onChangeStatusHandler(newStatus)}
-                        onChangeItem={(item) => this.changeSquareItem(item)} />
+                           onChangeStatus={(newStatus) => this.onChangeStatusHandler(newStatus)}
+                           onChangeItem={(item) => this.changeSquareItem(item)}/>
                 </div>
                 <div className="game-info">
-                    <div>{currentState.winner ? ('Winner: ' + currentState.winner) : ('Player: ' + currentState.currentPlayer)}</div>
-                    <ol>{this.state.history.map((state, index) => { return { text: index ? ('Step ' + index) : 'Start the Game', state: state } })
-                        .map((value, index) => (<li key={index}><button onClick={() => this.onGoToStepHandler(index)}>{value.text}</button>{value.state.square}</li>))}</ol>
+                    <div>{ state }</div>
+                    <ol>{this.state.history.map((state, index) => {
+                        return {text: index ? ('Step ' + index) : 'Start the Game', state: state}
+                    })
+                        .map((value, index) => (<li key={index}>
+                            <button onClick={() => this.onGoToStepHandler(index)}>{value.text}</button>
+                            {value.state.square}</li>))}</ol>
                 </div>
             </div>
         );
