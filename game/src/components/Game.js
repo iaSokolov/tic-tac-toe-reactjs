@@ -63,7 +63,7 @@ class Game extends React.Component {
 
         let currentState = this.state.history[this.state.history.length - 1];
         let state = currentState.winner ? ('Winner: ' + currentState.winner) :
-            this.state.history.length == 10 ? 'End game' : ('Player: ' + currentState.currentPlayer);
+            this.state.history.length == 10 ? 'The Game Over' : ('Player: ' + currentState.currentPlayer);
 
         return (
             <div className="game">
